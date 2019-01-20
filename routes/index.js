@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const {postRegister} = require('../controllers'); // extracting from the controller index.js , send the object 
+const {postRegister, postLogin, getLogout} = require('../controllers'); // extracting from the controller index.js , send the object 
 const {errorHandler} = require('../middleware'); //because it's index.js js know that we search for it,/middleware/index.js so map name is enough, same for the controllers
 
 /* GET home page. */
@@ -24,16 +23,10 @@ router.get('/login', (req, res, next) => {
 });
 
 /* POST /register page. */
-router.post('/login', passport.authenticate('local',{ 
-  successRedirect: '/',
-  failureRedirect: '/login'
- }));
+router.post('/login', postLogin);
 
  // GET /logout
- router.get('/logout', (req, res) => {
-  req.logout(); // take out the session
-  res.redirect('/');
-});
+ router.get('/logout', getLogout);
 
 /* GET /profile page. */
 router.get('/profile', (req, res, next) => {
