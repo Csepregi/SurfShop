@@ -9,5 +9,11 @@ module.exports = {
     // POST new ,new posts
     newPost(req, res, next){
         res.render('posts/new'); // its know that we looking it in views folder and a ejs file
+    }, 
+    // Posts Create
+    async createPost(req, res, next){
+        // use req.body to create  a new Post
+        let post = await Post.create(req.body);
+        res.redirect(`/posts/${post.id}`);
     }
 }
