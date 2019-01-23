@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {postRegister, postLogin, getLogout} = require('../controllers'); // extracting from the controller index.js , send the object 
-const {errorHandler} = require('../middleware'); //because it's index.js js know that we search for it,/middleware/index.js so map name is enough, same for the controllers
+const {asyncErrorHandler} = require('../middleware'); //because it's index.js js know that we search for it,/middleware/index.js so map name is enough, same for the controllers
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -15,7 +15,7 @@ router.get('/register', (req, res, next) => {
 });
 
 /* POST /register page. */
-router.post('/register', errorHandler(postRegister));
+router.post('/register', asyncErrorHandler(postRegister));
 
 /* GET /register page. */
 router.get('/login', (req, res, next) => {
