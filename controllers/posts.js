@@ -13,7 +13,7 @@ module.exports = {
     // POST index
     async postIndex(req, res, next) {
         let posts = await Post.find({});
-        res.render('posts/index', {posts}); //ejs6 enough just give one posts, not posts: posts
+        res.render('posts/index', {posts, title: 'Post index'}); //ejs6 enough just give one posts, not posts: posts
     }, 
     // POST new ,new posts
     postNew(req, res, next){

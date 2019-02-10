@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
+const engine = require('ejs-mate');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -31,8 +32,10 @@ db.once('open', () => {  //es5 function()
   console.log( 'we\'re connected!');
 });
 
+// use ejs-locals for all ejs templates:
+app.engine('ejs', engine);
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views')); // res.render => its says that see in the view directory
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -56,6 +59,14 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// title middleware
+// if this function would be more below it would not run, because other error handler is before. it have to be first
+app.use(function(req, res, next){
+  res.locals.title = 'Surf Shop';
+  next();
+})
+
+
 // Mount routes
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
@@ -77,5 +88,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
