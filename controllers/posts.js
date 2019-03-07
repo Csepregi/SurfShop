@@ -9,9 +9,9 @@ cloudinary.config({
     api_secret: 'zwrxn1eLwJeYBNB_IFa88cSEOBI'//process.env.CLOUDINARY_SECRET
 })
 
-module.exports = {
-    // POST index
-    async postIndex(req, res, next) {
+module.exports = {  
+     // POST index
+     async postIndex(req, res, next) {
         let posts = await Post.find({});
         res.render('posts/index', {posts, title: 'Post index'}); //ejs6 enough just give one posts, not posts: posts
     }, 
@@ -44,11 +44,19 @@ module.exports = {
         let post = await Post.create(req.body.post);
         console.log(post);
         console.log(post.coordinates);
+        req.session.success = "Post created successfully";
         res.redirect(`/posts/${post.id}`);
     }, 
     // Posts show
     async postShow(req, res, next){
-        let post = await Post.findById(req.params.id);
+        let post = await Post.findById(req.params.id).populate({
+            path: 'reviews',
+            options: {sort: {'_id': -1}},// sort in descending order (-1)
+            populate: {
+                path: "author",
+                model: "User"
+            }
+         });
         res.render('posts/show', { post });
     }, 
 
@@ -122,4 +130,5 @@ module.exports = {
         res.redirect('/posts');
     }
 }
+
 
